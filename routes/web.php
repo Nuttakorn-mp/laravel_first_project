@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,21 +38,37 @@ Route::get('/datatype', function () {
     ]);
 });
 
-Route::get('/control-structure', function(){
-    return view('/example/control',[
-        'records' => [1,2,3,4],
+Route::get('/control-structure', function () {
+    return view('/example/control', [
+        'records' => [1, 2, 3, 4],
         'case' => 2,
     ]);
 });
 
-Route::get('/components', function(){
-    return view('/example/component',[]);
+Route::get('/components', function () {
+    return view('/example/component', []);
 });
 
-Route::get('/foo',function(){
+Route::get('/foo', function () {
     return 'Hello World';
 });
 
+Route::view('/welcome', 'components/message', ['name' => '123']);
+
+Route::get('/DB', function () {
+    try{
+    if (DB::connection()->getPdo()) {
+        // echo 'Success connect DB ' . DB::connection()->getDatabaseName();
+        $dbName = DB::connection()->getDatabaseName();
+        $log = 'connect to '.$dbName.' success!!';
+        echo "<script>console.log('$log');</script>";
+    }}
+    catch(Exception $e){
+        echo "<script>console.log('Unable to connect');</script>";
+    }
+
+    return view('/example/connectDB');
+});
 //require parameters
 // Route::get('/user/{id}', function ($id) {
 //     return 'User '.$id;
@@ -63,14 +80,14 @@ Route::get('/foo',function(){
 // });
 
 Route::get('user/{name}', function ($name) {
-    return $name.' is subset of A-Z,a-z';
+    return $name . ' is subset of A-Z,a-z';
 })->where('name', '[A-Za-z]+');
 
 Route::get('user/{id}', function ($id) {
-    return $id.' is subset of 0-9';
+    return $id . ' is subset of 0-9';
 })->where('id', '[0-9]+');
 
 //combine 2 above in one
 Route::get('user/{id}/{name}', function ($id, $name) {
-    return 'id : '.$id.', name : '.$name.' is[0-9] and [A-Za-z]';
+    return 'id : ' . $id . ', name : ' . $name . ' is[0-9] and [A-Za-z]';
 })->where(['id' => '[0-9]+', 'name' => '[A-Za-z]+']);
