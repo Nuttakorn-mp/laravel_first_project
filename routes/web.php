@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 
+use App\Http\Controllers\CompanyCRUDController;
+
+Route::resource('companies',CompanyCRUDController::class);
 /*
 |--------------------------------------------------------------------------
 | Web Routes
